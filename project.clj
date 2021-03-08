@@ -7,5 +7,6 @@
                  [http-kit "2.5.3"]]
   :main ^:skip-aot patients.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all
+  :profiles {:uberjar {:uberjar-name "patients.jar"
+                       :aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

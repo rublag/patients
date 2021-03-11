@@ -62,6 +62,32 @@ spec:
       containers:
       - name: patients
         image: rublagns/patients:latest
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgresql-host
+          - name: POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgresql-port
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgresql-user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgresql-password
+          - name: POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgresql-database
         ports:
         - containerPort: 8080
       imagePullSecrets:

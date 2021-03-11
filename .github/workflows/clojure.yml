@@ -42,3 +42,9 @@ jobs:
         context: .
         push: true
         tags: rublagns/patients:latest
+    - name: Create Kube config from secret
+      env:
+        KUBE_CONFIG_TEXT: ${{ secrets.KUBE_CONFIG_TEXT }}
+      run: echo $KUBE_CONFIG_TEXT | base64 -d > kubeconfig.yaml
+    - name: Deploy
+      run: kubectl --kubeconfig kubeconfig.yaml replace -f patients.yaml --force

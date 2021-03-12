@@ -7,3 +7,6 @@
            :user (env :postgres-user)
            :password (env :postgres-password)
            :port (env :postgres-port)})
+
+(def migratus-conf {:store :database
+                    :db spec})

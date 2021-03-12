@@ -6,8 +6,10 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/java.jdbc "0.7.12"]
                  [org.postgresql/postgresql "42.2.19"]
+                 [ch.qos.logback/logback-classic "1.2.3"]
                  [environ "1.2.0"]
-                 [http-kit "2.5.3"]]
+                 [http-kit "2.5.3"]
+                 [migratus "1.3.5"]]
   :main ^:skip-aot patients.core
   :target-path "target/%s"
   :profiles {:uberjar {:uberjar-name "patients.jar"

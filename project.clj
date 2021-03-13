@@ -9,7 +9,8 @@
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [environ "1.2.0"]
                  [http-kit "2.5.3"]
-                 [migratus "1.3.5"]]
+                 [migratus "1.3.5"]
+                 [metosin/reitit "0.5.12"]]
   :main ^:skip-aot patients.core
   :target-path "target/%s"
   :profiles {:uberjar {:uberjar-name "patients.jar"

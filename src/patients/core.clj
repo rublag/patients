@@ -1,5 +1,7 @@
 (ns patients.core
-  (:use org.httpkit.server)
+  (:require [org.httpkit.server :refer :all]
+            [migratus.core :as migratus]
+            [patients.db :as db])
   (:gen-class))
 
 (defn app [req]
@@ -8,7 +10,7 @@
    :body "hello HTTP!"})
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
+  (migratus/migrate db/migratus-conf)
   (run-server app {:port 8080})
   (println "Server started."))

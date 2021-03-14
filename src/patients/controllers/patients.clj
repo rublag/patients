@@ -5,4 +5,4 @@
   "Return Ring response for patients page"
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body (layout/page)})
+   :body (layout/page {:title "Hello" :html [:h1 "World!"]})})

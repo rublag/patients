@@ -2,7 +2,8 @@
   (:require [org.httpkit.server :refer :all]
             [migratus.core :as migratus]
             [patients.db :as db]
-            [patients.app :as app])
+            [patients.app :as app]
+            [environ.core :refer [env]])
   (:gen-class))
 
 (defn app [req]
@@ -13,5 +14,6 @@
 (defn -main
   [& args]
   (migratus/migrate db/migratus-conf)
-  (run-server app/app {:port 8080})
+  (let [app (if (:use-reload env) app/dev-app app/app)]
+    (run-server app {:port 8080}))
   (println "Server started."))

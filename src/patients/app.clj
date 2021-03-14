@@ -1,8 +1,9 @@
 (ns patients.app
-  (:require [reitit.ring :as ring]))
+  (:require [reitit.ring :as ring]
+            [patients.controllers.patients :as patients]))
 
 (def router
   (ring/router
-   ["/" {:get (fn [req] {:status 200 :body "ok"})}]))
+   ["/" {:get patients/patients-page}]))
 
 (def app (ring/ring-handler router))

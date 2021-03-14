@@ -10,7 +10,8 @@
                  [environ "1.2.0"]
                  [http-kit "2.5.3"]
                  [migratus "1.3.5"]
-                 [metosin/reitit "0.5.12"]]
+                 [metosin/reitit "0.5.12"]
+                 [hiccup "1.0.5"]]
   :main ^:skip-aot patients.core
   :target-path "target/%s"
   :profiles {:uberjar {:uberjar-name "patients.jar"

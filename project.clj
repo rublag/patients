@@ -12,7 +12,9 @@
                  [migratus "1.3.5"]
                  [metosin/reitit "0.5.12"]
                  [hiccup "1.0.5"]
-                 [ring/ring-devel "1.9.1"]]
+                 [ring/ring-devel "1.9.1"]
+                 [honeysql "1.0.461"]
+                 [clojure.java-time "0.3.2"]]
   :main ^:skip-aot patients.core
   :target-path "target/%s"
   :profiles {:uberjar {:uberjar-name "patients.jar"

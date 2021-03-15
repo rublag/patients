@@ -7,6 +7,7 @@
 (defn page [data]
   (page/html5
    [:head
+    [:meta {:charset "utf-8"}]
     [:title (:title data)]
     [:link {:type "text/css"
             :rel "stylesheet"

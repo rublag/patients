@@ -12,3 +12,11 @@
                {:identifiers #(.replace % \_ \-)}))
   ([]
    (patients-list db/spec)))
+
+(defn patient-info
+  ([db-spec id]
+   (first (jdbc/query db-spec
+                      ["SELECT * FROM patients WHERE id=?" id]
+                      {:identifiers #(.replace % \_ \-)})))
+  ([id]
+   (patient-info db/spec id)))

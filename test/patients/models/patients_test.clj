@@ -55,5 +55,11 @@
     (t/is (= (map #(select-keys % [:first-name :last-name :patronimic-name]) (sut/patients-list))
              (map #(select-keys % [:first-name :last-name :patronimic-name]) fixture-data)))))
 
+(t/deftest patient-info-test
+  (t/testing "return correct patient"
+    (let [ids (range (count fixture-data))]
+      (t/is (= (vec (map #(sut/patient-info (inc %)) ids))
+               (vec (map #(assoc (nth fixture-data %) :id (inc %)) ids)))))))
+
 (t/use-fixtures :once fixture)
-;(t/use-fixtures :each transaction-fixture)
+(t/use-fixtures :each transaction-fixture)

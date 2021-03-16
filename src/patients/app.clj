@@ -6,7 +6,10 @@
 
 (def router
   (ring/router
-   ["/" {:get patients/patients-page}]))
+   [""
+    ["/" {:get patients/patients-page}]
+    ["/patients"
+     ["/:id" {:get patients/patient-info-page}]]]))
 
 (def app (ring/ring-handler router))
 

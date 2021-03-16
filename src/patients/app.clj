@@ -12,7 +12,8 @@
     ["/patients"
      ["/:id" {:get patients/patient-info-page}]]]))
 
-(def app (-> (ring/ring-handler router)
+(def app (-> (ring/ring-handler router
+                                (ring/create-default-handler))
              mw/wrap-errors))
 
 (def dev-app (-> #'app

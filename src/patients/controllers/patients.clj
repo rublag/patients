@@ -23,3 +23,9 @@
                            :html (view/patient-info patient)})}
       {:status 404})
     {:status 404}))
+
+(defn patient-new-page [req]
+  {:status 200
+   :headers {"Content-Type" "text/html"}
+   :body (layout/page {:title "Add new patient"
+                       :html (view/add-patient)})})

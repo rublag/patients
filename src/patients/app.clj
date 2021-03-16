@@ -10,7 +10,10 @@
    [""
     ["/" {:get patients/patients-page}]
     ["/patients"
-     ["/:id" {:get patients/patient-info-page}]]]))
+     ["/new" {:get patients/patient-new-page
+              :conflicting true}]
+     ["/:id" {:get patients/patient-info-page
+              :conflicting true}]]]))
 
 (def app (-> (ring/ring-handler router
                                 (ring/create-default-handler))

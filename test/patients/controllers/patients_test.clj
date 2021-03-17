@@ -103,8 +103,9 @@
 
 (t/deftest patient-edit-page-post-test
   (t/testing "patient-edit-page-post: incorrect form data"
-    (t/is (= 422 (:status (sut/patient-edit-page-post {:path-params {:id "3"}
-                                                       :form-params {}})))))
+    (with-redefs [sut/patient-edit-page (constantly {})]
+      (t/is (= 422 (:status (sut/patient-edit-page-post {:path-params {:id "3"}
+                                                                      :form-params {}}))))))
   (t/testing "patient-edit-page-post: redirect"
     (with-redefs [patients.models.patients/update-patient! (constantly nil)
                   sut/parse-params (constantly [{} #{}])]

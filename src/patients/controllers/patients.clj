@@ -80,16 +80,31 @@
        :body (layout/page {:title "Add new patient"
                            :html (view/add-patient errors)})})))
 
-(defn patient-edit-page [req]
+(defn patient-edit-page
+  ([req errors]
+   (if-let [id (u/str->int (get-in req [:path-params :id]))]
+     (if-let [patient (model/patient-info id)]
+       {:status 200
+        :headers {"Content-Type" "text/html"}
+        :body (layout/page {:title (str/join " " ["Edit:"
+                                                  (:last-name patient)
+                                                  (:first-name patient)
+                                                  (:patronymic-name patient)
+                                                  "- Patients"])
+                            :html (view/edit-patient patient errors)})}
+       {:status 404})
+     {:status 404}))
+  ([req] (patient-edit-page req #{})))
+
+(defn patient-edit-page-post [req]
   (if-let [id (u/str->int (get-in req [:path-params :id]))]
-    (if-let [patient (model/patient-info id)]
-      {:status 200
-       :headers {"Content-Type" "text/html"}
-       :body (layout/page {:title (str/join " " ["Edit:"
-                                                 (:last-name patient)
-                                                 (:first-name patient)
-                                                 (:patronymic-name patient)
-                                                 "- Patients"])
-                           :html (view/edit-patient patient)})}
-      {:status 404})
+    (let [[params errors] (parse-params (:form-params req))]
+      (if (empty? errors)
+        (do
+          (model/update-patient! id params)
+          (-> (str "/patients/" id)
+              (response/redirect :see-other)
+              (response/content-type "text/html")))
+        (-> (patient-edit-page req errors)
+            (response/status 422))))
     {:status 404}))

@@ -32,8 +32,8 @@
      [:a.btn.btn-primary {:href (str "/patients/" (:id patient) "/edit")} "Edit patient"]]]))
 
 (defn patient-form
-  ([errors defaults]
-   [:form {:action "/patients/new" :method "POST"}
+  ([action submit-text errors defaults]
+   [:form {:action action :method "POST"}
     [:div.form-floating.mb-3
      [:input#last-name-input.form-control {:placeholder "Last name"
                                            :name :last-name
@@ -100,18 +100,19 @@
                       :class (when (:sex errors) "is-invalid")}]
       [:div.invalid-feedback "Please choose the patient's sex"]]]
     [:div.d-grid.gap-2
-     [:input.btn.btn-primary {:type :submit :value "Add patient"}]]])
-  ([errors]
-   (patient-form errors {})))
+     [:input.btn.btn-primary {:type :submit :value submit-text}]]])
+  ([action submit-text errors]
+   (patient-form action submit-text errors {})))
 
 (defn add-patient
   ([errors]
    (seq [[:h2.mb-4 "Add new patient"]
-         (patient-form errors)]))
+         (patient-form "/patients/new" "Add new patient" errors)]))
   ([] (add-patient #{})))
 
 (defn edit-patient
   ([patient errors]
    (seq [[:h2.mb-4 "Edit patient"]
-         (patient-form errors patient)]))
+         (patient-form (str "/patients/" (:id patient) "/edit")
+                       "Edit patient" errors patient)]))
   ([patient] (edit-patient patient #{})))

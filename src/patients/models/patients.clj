@@ -27,3 +27,10 @@
                        {:entities #(.replace % \- \_)}))))
   ([patient]
    (add-patient! db/spec patient)))
+
+(defn update-patient!
+  ([db-spec id patient]
+   (jdbc/update! db-spec :patients patient
+                 ["id = ?" id]
+                 {:entities #(.replace % \- \_)}))
+  ([id patient] (update-patient! db/spec id patient)))

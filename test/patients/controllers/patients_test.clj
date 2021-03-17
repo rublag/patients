@@ -77,7 +77,7 @@
                                  "Location")
                                 #"/")))))))
 
-(t/deftest patient-info-page-test
+(t/deftest patient-edit-page-test
   (t/testing "patient edit page: path parameters"
     (with-redefs [patients.models.patients/patient-info (constantly {})]
       (t/is (= 404 (:status (sut/patient-edit-page {}))))
@@ -89,7 +89,7 @@
       (t/is (= 404 (:status (sut/patient-edit-page {:path-params {:id "1"}}))))))
   (t/testing "patients edit page: model interaction"
     (with-redefs [patients.views.layout/page identity
-                  patients.views.patients/edit-patient identity
+                  patients.views.patients/edit-patient (fn [x & _] x)
                   patients.models.patients/patient-info (constantly {:last-name "a"
                                                                      :first-name "b"
                                                                      :patronymic-name "c"})]
@@ -100,3 +100,15 @@
                               :first-name "b"
                               :patronymic-name "c"}}}
                (sut/patient-edit-page {:path-params {:id "1"}}))))))
+
+(t/deftest patient-edit-page-post-test
+  (t/testing "patient-edit-page-post: incorrect form data"
+    (t/is (= 422 (:status (sut/patient-edit-page-post {:path-params {:id "3"}
+                                                       :form-params {}})))))
+  (t/testing "patient-edit-page-post: redirect"
+    (with-redefs [patients.models.patients/update-patient! (constantly nil)
+                  sut/parse-params (constantly [{} #{}])]
+      (t/is (= "10"
+               (peek (str/split ((:headers (sut/patient-edit-page-post {:path-params {:id "10"}}))
+                                 "Location")
+                                #"/")))))))

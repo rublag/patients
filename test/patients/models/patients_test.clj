@@ -74,5 +74,13 @@
           result (sut/patient-info *trans* id)]
       (t/is (= (assoc data :id id) result)))))
 
+(t/deftest update-patient-test
+  (t/testing "update-patient!"
+    (let [id 2
+          patient (nth fixture-data (dec id))]
+      (sut/update-patient! *trans* id {:address "Новосибирск"})
+      (t/is (= (assoc patient :id id :address "Новосибирск")
+               (sut/patient-info *trans* id))))))
+
 (t/use-fixtures :once fixture)
 (t/use-fixtures :each transaction-fixture)

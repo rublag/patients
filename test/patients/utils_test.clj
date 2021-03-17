@@ -1,6 +1,7 @@
 (ns patients.utils-test
   (:require [patients.utils :as sut]
-            [clojure.test :as t]))
+            [clojure.test :as t]
+            [java-time :as time]))
 
 (t/deftest str->int-test
   (t/testing "str->int: integers"
@@ -18,3 +19,10 @@
 (t/deftest kebab->snake-test
   (t/testing "kebab->snake"
     (t/is (= "a_b_c_d" (sut/kebab->snake "a-b_c-d")))))
+
+(t/deftest parse-html-date-test
+  (t/testing "date parsing"
+    (t/is (= (time/sql-date 2020 03 06)
+             (sut/parse-html-date "2020-03-06")))
+    (t/is (= nil (sut/parse-html-date "2020-03-0d")))
+    (t/is (= nil (sut/parse-html-date nil)))))

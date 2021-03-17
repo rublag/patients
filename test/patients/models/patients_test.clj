@@ -61,5 +61,18 @@
       (t/is (= (vec (map #(sut/patient-info (inc %)) ids))
                (vec (map #(assoc (nth fixture-data %) :id (inc %)) ids)))))))
 
+(t/deftest add-patient-test
+  (t/testing "add-patient!"
+    (let [data {:first-name "Смирнов"
+                :patronymic-name "Андреевич"
+                :last-name "Дмитрий"
+                :oms-number "1234567890123456"
+                :birthday (time/sql-date 1997 06 25)
+                :address "Москва"
+                :sex "male"}
+          id (sut/add-patient! *trans* data)
+          result (sut/patient-info *trans* id)]
+      (t/is (= (assoc data :id id) result)))))
+
 (t/use-fixtures :once fixture)
 (t/use-fixtures :each transaction-fixture)

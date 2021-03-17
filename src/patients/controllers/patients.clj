@@ -3,7 +3,9 @@
             [patients.views.patients :as view]
             [patients.models.patients :as model]
             [patients.utils :as u]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.walk :as walk]
+            [ring.util.response :as response]))
 
 (defn patients-page "Return Ring response for patients page"
   [req]
@@ -29,3 +31,51 @@
    :headers {"Content-Type" "text/html"}
    :body (layout/page {:title "Add new patient"
                        :html (view/add-patient)})})
+
+(defn wrap-errors [params]
+  [params #{}])
+
+(defn validate-sex [[params errors]]
+  (let [sex (:sex params)]
+    (if (or (= "male" sex) (= "female" sex))
+      [params errors]
+      [params (conj errors :sex)])))
+
+(defn parse-birthday [[params errors]]
+  (let [birthday (u/parse-html-date (:birthday params))]
+    (if birthday
+      [(assoc params :birthday birthday) errors]
+      [params (conj errors :birthday)])))
+
+(defn replace-blank-strings [[params errors]]
+  [(into {} (map (fn [[k v]]
+                   (if (and (string? v) (str/blank? v))
+                     [k nil]
+                     [k v]))
+                 params))
+   errors])
+
+(defn validate-presence [[params errors] required-keys]
+  [params (apply conj errors
+                (filter #(not (% params)) required-keys))])
+
+(defn parse-params [params]
+  (-> params
+      walk/keywordize-keys
+      wrap-errors
+      replace-blank-strings
+      (validate-presence [:birthday :first-name :oms-number :sex])
+      parse-birthday
+      validate-sex))
+
+(defn patient-new-page-post [req]
+  (let [[params errors] (parse-params (:form-params req))]
+    (if (empty? errors)
+      (let [id (model/add-patient! params)]
+        (-> (str "/patients/" id)
+            (response/redirect :see-other)
+            (response/content-type "text/html")))
+      {:status 422
+       :headers {"Content-type" "text/html"}
+       :body (layout/page {:title "Add new patient"
+                           :html (view/add-patient errors)})})))

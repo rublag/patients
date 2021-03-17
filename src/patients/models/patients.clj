@@ -20,3 +20,10 @@
                       {:identifiers #(.replace % \_ \-)})))
   ([id]
    (patient-info db/spec id)))
+
+(defn add-patient!
+  ([db-spec patient]
+   (:id (first (jdbc/insert! db-spec :patients patient
+                       {:entities #(.replace % \- \_)}))))
+  ([patient]
+   (add-patient! db/spec patient)))

@@ -1,5 +1,6 @@
 (ns patients.app
   (:require [reitit.ring :as ring]
+            [reitit.ring.middleware.parameters :as parameters]
             [ring.middleware.reload :as reload]
             [ring.middleware.lint :as lint]
             [patients.controllers.patients :as patients]
@@ -11,6 +12,8 @@
     ["/" {:get patients/patients-page}]
     ["/patients"
      ["/new" {:get patients/patient-new-page
+              :post patients/patient-new-page-post
+              :middleware [parameters/parameters-middleware]
               :conflicting true}]
      ["/:id" {:get patients/patient-info-page
               :conflicting true}]]]))

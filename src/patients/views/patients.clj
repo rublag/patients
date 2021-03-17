@@ -3,8 +3,8 @@
             [clojure.string :as str]))
 
 (defn patients-list-entry [patient]
-  (let [{:keys [id first-name last-name patronimic-name]} patient
-        name (str/join " " [last-name first-name patronimic-name])]
+  (let [{:keys [id first-name last-name patronymic-name]} patient
+        name (str/join " " [last-name first-name patronymic-name])]
     [:a.list-group-item.list-group-item-action {:href (str "/patients/" id)} name]))
 
 (defn patients-list [patients]
@@ -25,7 +25,7 @@
   [:ul.list-unstyled
    (remove nil?
            (map #(render-info-item patient %)
-                [:last-name :first-name :patronimic-name :sex :birthday
+                [:last-name :first-name :patronymic-name :sex :birthday
                  :address :oms-number]))])
 
 (defn add-patient-form [errors]

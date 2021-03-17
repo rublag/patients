@@ -28,11 +28,11 @@
                   patients.views.patients/patient-info identity
                   patients.models.patients/patient-info (constantly {:last-name "a"
                                                                      :first-name "b"
-                                                                     :patronimic-name "c"})]
+                                                                     :patronymic-name "c"})]
       (t/is (= {:status 200
                 :headers {"Content-Type" "text/html"}
                 :body {:title "a b c"
                        :html {:last-name "a"
                               :first-name "b"
-                              :patronimic-name "c"}}}
+                              :patronymic-name "c"}}}
                (sut/patient-info-page {:path-params {:id "1"}}))))))

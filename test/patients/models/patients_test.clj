@@ -12,21 +12,21 @@
 (def fixture-data
   [{:first-name "John"
     :last-name "Doe"
-    :patronimic-name nil
+    :patronymic-name nil
     :birthday (time/sql-date 1975 3 7)
     :sex "male"
     :address "Uglegorsk"
     :oms-number "37A-2718"}
    {:first-name "Иван"
     :last-name "Петров"
-    :patronimic-name "Сидорович"
+    :patronymic-name "Сидорович"
     :birthday (time/sql-date 2010 4 7)
     :sex "male"
     :address "Москва, Ленинские горы, 1"
     :oms-number "7105816491758265"}
    {:first-name "Елена"
     :last-name "Иванова"
-    :patronimic-name "Игоревна"
+    :patronymic-name "Игоревна"
     :sex "female"
     :address "Санкт-Петербург, Ленина, 17"
     :birthday (time/sql-date 1990 2 9)
@@ -52,8 +52,8 @@
 ;;;; TESTS =====================
 (t/deftest patients-list-test
   (t/testing "returns correct list"
-    (t/is (= (map #(select-keys % [:first-name :last-name :patronimic-name]) (sut/patients-list))
-             (map #(select-keys % [:first-name :last-name :patronimic-name]) fixture-data)))))
+    (t/is (= (map #(select-keys % [:first-name :last-name :patronymic-name]) (sut/patients-list))
+             (map #(select-keys % [:first-name :last-name :patronymic-name]) fixture-data)))))
 
 (t/deftest patient-info-test
   (t/testing "return correct patient"

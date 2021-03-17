@@ -19,7 +19,7 @@
        :headers {"Content-Type" "text/html"}
        :body (layout/page {:title (str/join " " [(:last-name patient)
                                                  (:first-name patient)
-                                                 (:patronimic-name patient)])
+                                                 (:patronymic-name patient)])
                            :html (view/patient-info patient)})}
       {:status 404})
     {:status 404}))

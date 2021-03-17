@@ -8,7 +8,7 @@
 (defn patients-list
   ([db-spec]
    (jdbc/query db-spec
-               ["SELECT id, first_name, patronimic_name, last_name FROM patients"]
+               ["SELECT id, first_name, patronymic_name, last_name FROM patients"]
                {:identifiers #(.replace % \_ \-)}))
   ([]
    (patients-list db/spec)))

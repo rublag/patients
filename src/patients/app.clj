@@ -15,8 +15,10 @@
               :post patients/patient-new-page-post
               :middleware [parameters/parameters-middleware]
               :conflicting true}]
-     ["/:id" {:get patients/patient-info-page
-              :conflicting true}]]]))
+     ["/:id"
+      ["" {:get patients/patient-info-page
+           :conflicting true}]
+      ["/edit" {:get patients/patient-edit-page}]]]]))
 
 (def app (-> (ring/ring-handler router
                                 (ring/create-default-handler))

@@ -79,3 +79,17 @@
        :headers {"Content-type" "text/html"}
        :body (layout/page {:title "Add new patient"
                            :html (view/add-patient errors)})})))
+
+(defn patient-edit-page [req]
+  (if-let [id (u/str->int (get-in req [:path-params :id]))]
+    (if-let [patient (model/patient-info id)]
+      {:status 200
+       :headers {"Content-Type" "text/html"}
+       :body (layout/page {:title (str/join " " ["Edit:"
+                                                 (:last-name patient)
+                                                 (:first-name patient)
+                                                 (:patronymic-name patient)
+                                                 "- Patients"])
+                           :html (view/edit-patient patient)})}
+      {:status 404})
+    {:status 404}))

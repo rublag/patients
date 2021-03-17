@@ -1,7 +1,8 @@
 (ns patients.controllers.patients-test
   (:require [patients.controllers.patients :as sut]
             [clojure.test :as t]
-            [patients.utils :as u]))
+            [patients.utils :as u]
+            [clojure.string :as str]))
 
 (t/deftest patients-page-test
   (t/testing "patients page"
@@ -64,3 +65,38 @@
   (t/testing "replace-empty-strings"
     (t/is (= [{:k1 nil "" nil :k2 "value" :k3 :v} #{}]
              (sut/replace-blank-strings [{:k1 "" "" "" :k2 "value" :k3 :v} #{}])))))
+
+(t/deftest patient-new-page-post-test
+  (t/testing "patient-new-page-post: incorrect form data"
+    (t/is (= 422 (:status (sut/patient-new-page-post {:form-params {}})))))
+  (t/testing "patient-new-page-post: redirect"
+    (with-redefs [patients.models.patients/add-patient! (constantly 10)
+                  sut/parse-params (constantly [{} #{}])]
+      (t/is (= "10"
+               (peek (str/split ((:headers (sut/patient-new-page-post {}))
+                                 "Location")
+                                #"/")))))))
+
+(t/deftest patient-info-page-test
+  (t/testing "patient edit page: path parameters"
+    (with-redefs [patients.models.patients/patient-info (constantly {})]
+      (t/is (= 404 (:status (sut/patient-edit-page {}))))
+      (t/is (= 404 (:status (sut/patient-edit-page {:path-params {}}))))
+      (t/is (= 404 (:status (sut/patient-edit-page {:path-params {:id "abc"}}))))
+      (t/is (= 200 (:status (sut/patient-edit-page {:path-params {:id "123"}}))))))
+  (t/testing "patients edit page: non-existent id"
+    (with-redefs [patients.models.patients/patient-info (constantly nil)]
+      (t/is (= 404 (:status (sut/patient-edit-page {:path-params {:id "1"}}))))))
+  (t/testing "patients edit page: model interaction"
+    (with-redefs [patients.views.layout/page identity
+                  patients.views.patients/edit-patient identity
+                  patients.models.patients/patient-info (constantly {:last-name "a"
+                                                                     :first-name "b"
+                                                                     :patronymic-name "c"})]
+      (t/is (= {:status 200
+                :headers {"Content-Type" "text/html"}
+                :body {:title "Edit: a b c - Patients"
+                       :html {:last-name "a"
+                              :first-name "b"
+                              :patronymic-name "c"}}}
+               (sut/patient-edit-page {:path-params {:id "1"}}))))))

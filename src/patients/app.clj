@@ -20,7 +20,8 @@
            :conflicting true}]
       ["/edit" {:get patients/patient-edit-page
                 :post patients/patient-edit-page-post
-                :middleware [parameters/parameters-middleware]}]]]]))
+                :middleware [parameters/parameters-middleware]}]
+      ["/delete" {:post patients/patient-delete-post}]]]]))
 
 (def app (-> (ring/ring-handler router
                                 (ring/create-default-handler))

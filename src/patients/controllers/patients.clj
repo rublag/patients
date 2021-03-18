@@ -108,3 +108,12 @@
         (-> (patient-edit-page req errors)
             (response/status 422))))
     {:status 404}))
+
+(defn patient-delete-post [req]
+  (if-let [id (u/str->int (get-in req [:path-params :id]))]
+    (do
+      (model/delete-patient! id)
+      (-> (str "/")
+          (response/redirect :see-other)
+          (response/content-type "text/html")))
+    {:status 404}))

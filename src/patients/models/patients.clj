@@ -34,3 +34,11 @@
                  ["id = ?" id]
                  {:entities #(.replace % \- \_)}))
   ([id patient] (update-patient! db/spec id patient)))
+
+(defn delete-patient!
+  ([db-spec id]
+   (jdbc/delete! db-spec :patients
+                 ["id = ?" id]
+                 {:entities #(.replace % \- \_)}))
+  ([id]
+   (delete-patient! db/spec id)))

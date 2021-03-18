@@ -29,7 +29,9 @@
                   [:last-name :first-name :patronymic-name :sex :birthday
                    :address :oms-number]))]
     [:div.d-grid.gap-2
-     [:a.btn.btn-primary {:href (str "/patients/" (:id patient) "/edit")} "Edit patient"]]]))
+     [:a.btn.btn-primary {:href (str "/patients/" (:id patient) "/edit")} "Edit patient"]
+     [:form.d-grid {:action (str "/patients/" (:id patient) "/delete") :method :post}
+      [:input.btn.btn-danger {:type :submit :value "Delete patient"}]]]]))
 
 (defn patient-form
   ([action submit-text errors defaults]
